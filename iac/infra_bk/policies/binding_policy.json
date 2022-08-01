@@ -1,0 +1,18 @@
+{
+  "bindings": [
+    {
+      "members": [
+        "serviceAccount:228378926381-compute@developer.gserviceaccount.com",
+        "serviceAccount:228378926381@cloudservices.gserviceaccount.com",
+        "user:bestabokadon910@gmail.com"
+      ],
+      "role": "roles/iam.serviceAccountAdmin"
+    },
+    {
+      "members": [
+        "serviceAccount:228378926381-compute@developer.gserviceaccount.com"
+      ],
+      "role": "roles/iam.serviceAccountUser"
+    }
+  ]
+}
