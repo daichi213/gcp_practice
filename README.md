@@ -7,7 +7,7 @@
 1. Install the gcloud
 
 ```powershell
-$ choco install -y gcloudsdk
+$ cinst -y gcloudsdk
 ```
 
 2. 認証
@@ -16,12 +16,22 @@ $ choco install -y gcloudsdk
 # 自分の場合、initは特に実行していないが問題なく動作していた
 $ gcloud init
 $ gcloud auth login
+# リモートサーバーなどから認証を行う場合は以下のコマンドを実行して取得したURLでアクセスして表示されたTOKENを入力して認証する
+$ gcloud auth login --no-browser
 ```
 
 [この時点では、Terraform などが ArtifactRegistry を使用する際にエラーが発生してしまうため、以下コマンドを実行してさらに認証を完了させておく](https://zenn.dev/waddy/articles/terraform-google-cloud#gcloud-%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB)。
 
 ```powershell
 $ gcloud auth application-default login
+```
+
+### 接続するプロジェクトの変更
+
+```powershell
+gcloud projects list
+gcloud config list
+gcloud config set project daichi-ozaki213-gcp-tutorial
 ```
 
 ### ArtifactRegistry の認証
@@ -34,6 +44,26 @@ $ gcloud components update
 ```
 
 本認証を実行すれば Terraform が使用する
+
+## gsutil
+
+GCS を細かく操作することができる CLI で、バケットの作成からアクセスコントロールの設定まで様々な制御を行うことができる。
+
+[コマンド一覧](https://www.faq.idcf.jp/app/answers/detail/a_id/920/~/gsutil-%E3%81%AE%E4%BD%BF%E3%81%84%E6%96%B9%E3%82%92%E6%95%99%E3%81%88%E3%81%A6%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84%E3%80%82)
+[ACL の参考ページ](https://cloud.google.com/storage/docs/access-control/create-manage-lists?hl=ja)
+
+### 使い方
+
+```powershell
+# 最初にCLIからGCPへの認証と操作するGCSの存在するプロジェクトへ接続する
+gcloud projects list
+gcloud config list
+gcloud config set project daichi-ozaki213-gcp-tutorial
+# gsutilを使用開始できる
+# Bucketの作成
+gsutil mb -c standard -l us-east1 gs://daichi-tutorial1008-bucket
+gsutil ls
+```
 
 ## Terraform
 

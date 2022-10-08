@@ -152,3 +152,56 @@ WINDOWS の場合は、ここで OS を再起動して無事`terraform import`�
 ```powershell
 $ terraform import google_artifact_registry_repository.my_repo projects/angular-cosmos-280512/locations/us-central1/repositories/hello-repo
 ```
+
+## powershell のスクリプト実行ポリシーエラー
+
+[参考ページ](https://qiita.com/ponsuke0531/items/4629626a3e84bcd9398f)
+
+```powershell
+PS C:\Windows\system32> gcloud
+gcloud : このシステムではスクリプトの実行が無効になっているため、ファイル C:\Program Files (x86)\Google\Cloud SDK\googl
+e-cloud-sdk\bin\gcloud.ps1 を読み込むことができません。詳細については、「about_Execution_Policies」(https://go.microsof
+t.com/fwlink/?LinkID=135170) を参照してください。
+発生場所 行:1 文字:1
++ gcloud
++ ~~~~~~
+    + CategoryInfo          : セキュリティ エラー: (: ) []、PSSecurityException
+    + FullyQualifiedErrorId : UnauthorizedAccess
+```
+
+```powershell
+Set-Executionpolicy -ExecutionPolicy RemoteSigned -Scope Process
+Get-Executionpolicy
+
+Set-Executionpolicy -ExecutionPolicy Restricted -Scope Process
+Get-Executionpolicy
+```
+
+## gcloud auth login --no-launch-browser 実行時のエラー
+
+gcloud auth login --no-launch-browser 使用時に以下エラーに遭遇
+
+> 承認エラー
+> エラー 400: invalid_request
+> The version of the app you're using doesn't include the latest security features to keep you protected. Please make sure to download from a trusted source and update to the latest, most secure version.
+> このセクションのコンテンツはアプリ デベロッパーが提供したものです。このコンテンツは、Google で審査、検証されていません。
+> アプリ デベロッパーの方は、これらのリクエストの詳細が Google のポリシーを遵守していることをご確認ください。
+> access_type: offline
+> response_type: code
+> redirect_uri: urn:ietf:wg:oauth:2.0:oob
+> state: 6iQI90lCgCSBxRYLv8vwPPxAN3k5PN
+> code_challenge_method: S256
+> prompt: consent
+> client_id: 32555940559.apps.googleusercontent.com
+> code_challenge: 6LcTGa289DFJym4z9FrGW3kqRHcvHuZEw5c1g3QqyFs
+> scope: openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/appengine.admin https://www.googleapis.com/auth/compute https://www.googleapis.com/auth/accounts.reauth
+
+原因は gcloud のバージョンが最新でないことが原因だった
+
+【対処】
+以下手順で gcloud をバージョンアップ
+
+```bash
+sudo apt-get upgrade gcloud
+sudo apt-get upgrade google-cloud-sdk
+```
